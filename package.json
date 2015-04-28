@@ -1,0 +1,16 @@
+{
+	"name": "wordpress-bookmarks",
+	"version": "0.1.0",
+	"description": "Host your bookmarks on WordPress",
+	"author": {
+		"name": "Jtsternberg",
+		"url": "http://dsgnwrks.pro"
+	},
+	"license": "GPLv2",
+	"devDependencies": {
+	    "grunt": "latest",
+	    "grunt-contrib-watch": "latest",
+	    "grunt-wp-i18n": "latest",
+	    "load-grunt-tasks": "latest"
+	}
+}

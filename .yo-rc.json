@@ -1,0 +1,17 @@
+{
+  "generator-plugin-wp": {
+    "name": "WordPress Bookmarks",
+    "homepage": "http://dsgnwrks.pro",
+    "description": "Host your bookmarks on WordPress",
+    "version": "0.1.0",
+    "author": "Jtsternberg",
+    "authoremail": "justin@dsgnwrks.pro",
+    "authorurl": "http://dsgnwrks.pro",
+    "license": "GPLv2",
+    "slug": "wordpress-bookmarks",
+    "classname": "WordPress_Bookmarks",
+    "classprefix": "WPB_",
+    "prefix": "wordpress_bookmarks",
+    "year": 2015
+  }
+}

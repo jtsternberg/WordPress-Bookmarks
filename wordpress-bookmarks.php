@@ -62,9 +62,12 @@ class WordPress_Bookmarks {
 
 	const VERSION = '0.1.0';
 
-	protected $url      = '';
-	protected $path     = '';
-	protected $basename = '';
+	protected $url           = '';
+	protected $path          = '';
+	protected $basename      = '';
+	protected $cli           = null;
+	protected $pressthis     = null;
+	protected $forward_links = null;
 	protected static $single_instance = null;
 
 	/**
@@ -89,8 +92,8 @@ class WordPress_Bookmarks {
 		$this->url      = plugin_dir_url( __FILE__ );
 		$this->path     = plugin_dir_path( __FILE__ );
 
-		$instance->plugin_classes();
-		$instance->hooks();
+		$this->plugin_classes();
+		$this->hooks();
 	}
 
 	/**
@@ -98,8 +101,13 @@ class WordPress_Bookmarks {
 	 * @since 0.1.0
 	 */
 	function plugin_classes() {
-		// Attach other plugin classes to the base plugin class.
-		// $this->admin = new WPB_Admin( $this );
+		if ( defined('WP_CLI') && WP_CLI ) {
+			$this->cli = new WPB_Chrome_Bookmarks_CLI();
+			WP_CLI::add_command( 'chrome_bookmarks', 'WPB_Chrome_Bookmarks_CLI' );
+		}
+
+		$this->pressthis     = new WPB_Press_This();
+		$this->forward_links = new WPB_Forward_Links();
 	}
 
 	/**
@@ -107,27 +115,10 @@ class WordPress_Bookmarks {
 	 * @since 0.1.0
 	 */
 	public function hooks() {
-		register_activation_hook( __FILE__, array( $this, '_activate' ) );
-		register_deactivation_hook( __FILE__, array( $this, '_deactivate' ) );
-
 		add_action( 'init', array( $this, 'init' ) );
+		$this->pressthis->hooks();
+		$this->forward_links->hooks();
 	}
-
-	/**
-	 * Activate the plugin
-	 * @since  0.1.0
-	 */
-	function _activate() {
-		// Make sure any rewrite functionality has been loaded
-		flush_rewrite_rules();
-	}
-
-	/**
-	 * Deactivate the plugin
-	 * Uninstall routines should be in uninstall.php
-	 * @since  0.1.0
-	 */
-	function _deactivate() {}
 
 	/**
 	 * Init hooks
@@ -135,45 +126,7 @@ class WordPress_Bookmarks {
 	 * @return null
 	 */
 	public function init() {
-		if ( $this->check_requirements() ) {
-			$locale = apply_filters( 'plugin_locale', get_locale(), 'wordpress-bookmarks' );
-			load_textdomain( 'wordpress-bookmarks', WP_LANG_DIR . '/wordpress-bookmarks/wordpress-bookmarks-' . $locale . '.mo' );
-			load_plugin_textdomain( 'wordpress-bookmarks', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
-		}
-	}
-
-	/**
-	 * Check that all plugin requirements are met
-	 * @since  0.1.0
-	 * @return boolean
-	 */
-	public static function meets_requirements() {
-		// Do checks for required classes / functions
-		// function_exists('') & class_exists('')
-
-		// We have met all requirements
-		return true;
-	}
-
-	/**
-	 * Check if the plugin meets requirements and
-	 * disable it if they are not present.
-	 * @since  0.1.0
-	 * @return boolean result of meets_requirements
-	 */
-	public function check_requirements() {
-		if ( ! $this->meets_requirements() ) {
-			// Display our error
-			echo '<div id="message" class="error">';
-			echo '<p>' . sprintf( __( 'WordPress Bookmarks is missing requirements and has been <a href="%s">deactivated</a>. Please make sure all requirements are available.', 'wordpress-bookmarks' ), admin_url( 'plugins.php' ) ) . '</p>';
-			echo '</div>';
-			// Deactivate our plugin
-			deactivate_plugins( $this->basename );
-
-			return false;
-		}
-
-		return true;
+		load_plugin_textdomain( 'wordpress-bookmarks', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 	}
 
 	/**
@@ -191,6 +144,8 @@ class WordPress_Bookmarks {
 			case 'basename':
 			case 'url':
 			case 'path':
+			case 'cli':
+			case 'pressthis':
 				return $this->$field;
 			default:
 				throw new Exception( 'Invalid '. __CLASS__ .' property: ' . $field );
@@ -208,6 +163,31 @@ class WordPress_Bookmarks {
 			return include_once( $file );
 		}
 	}
+
+	/**
+	 * This plugin's directory
+	 * @since  0.1.0
+	 * @param  string $path (optional) appended path
+	 * @return string       Directory and path
+	 */
+	public static function dir( $path = '' ) {
+		static $dir;
+		$dir = $dir ? $dir : trailingslashit( dirname( __FILE__ ) );
+		return $dir . $path;
+	}
+
+	/**
+	 * This plugin's url
+	 * @since  0.1.0
+	 * @param  string $path (optional) appended path
+	 * @return string       URL and path
+	 */
+	public static function url( $path = '' ) {
+		static $url;
+		$url = $url ? $url : trailingslashit( plugin_dir_url( __FILE__ ) );
+		return $url . $path;
+	}
+
 }
 
 /**

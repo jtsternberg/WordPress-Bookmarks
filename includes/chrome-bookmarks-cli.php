@@ -481,11 +481,16 @@ class WPB_Chrome_Bookmarks_CLI {
 		$post_id = wp_insert_post( $post_data );
 
 		if ( $post_id ) {
+
 			$this->bookmarks_imported++;
+
 			update_post_meta( $post_id, 'chrome_date_added', $bookmark['date_added'] );
 			update_post_meta( $post_id, 'chrome_id', $bookmark['id'] );
-			update_post_meta( $post_id, 'chrome_url', $bookmark['url'] );
+			update_post_meta( $post_id, 'bookmark_url', $bookmark['url'] );
+			set_post_format( $post_id, 'link' );
+
 			$this->verbose_line( 'Post Inserted: '. $bookmark['name'] );
+
 		} else {
 			$this->bookmarks_skipped++;
 			$this->verbose_line( 'Failed to insert: '. $bookmark['name'] );
@@ -523,7 +528,7 @@ class WPB_Chrome_Bookmarks_CLI {
 	protected function post_exists( $bookmark ) {
 		$query_args = array(
 			'post_type'      => 'post',
-			'meta_key'       => 'chrome_url',
+			'meta_key'       => 'bookmark_url',
 			'meta_value'     => $bookmark['url'],
 			'posts_per_page' => 1,
 		);

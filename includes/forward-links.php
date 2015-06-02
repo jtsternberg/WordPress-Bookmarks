@@ -42,13 +42,13 @@ class WPB_Forward_Links {
 			return false;
 		}
 
-		$post_excerpt = str_ireplace( array( 'http://', 'https://' ), '', $_post->post_excerpt );
-
-		if ( false === stripos( $post_excerpt, '.' ) ) {
+		if ( false === stripos( $_post->post_excerpt, '.' ) ) {
 			return false;
 		}
 
-		return $post_excerpt;
+		$url = esc_url( $_post->post_excerpt );
+
+		return $url ? $url : false;
 	}
 
 }

@@ -9,7 +9,7 @@
 
 ## Description ##
 
-Host your bookmarks on WordPress
+Host your bookmarks on WordPress. Recommended to be used with [my fork of the Tasty theme](https://github.com/jtsternberg/Tasty).
 
 ## Installation ##
 

@@ -388,7 +388,7 @@ class WPB_Chrome_Bookmarks_CLI {
 				$this->import_bookmark( $bookmark, $depth );
 			}
 
-			if ( ( $this->ookmarks_processed > 1 ) && 0 == ( ( $this->ookmarks_processed % 100 ) ) ) {
+			if ( ( $this->bookmarks_processed > 1 ) && 0 == ( ( $this->bookmarks_processed % 100 ) ) ) {
 
 				if ( ! $this->check_if_importing() ) {
 
@@ -458,7 +458,7 @@ class WPB_Chrome_Bookmarks_CLI {
 			$this->insert_bookmark( $bookmark, $depth );
 		}
 
-		$this->ookmarks_processed++;
+		$this->bookmarks_processed++;
 		$this->progress_bar( 'tick' );
 	}
 

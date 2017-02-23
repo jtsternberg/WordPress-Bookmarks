@@ -1,11 +1,11 @@
 # WordPress Bookmarks #
-**Contributors:**      Jtsternberg
-**Donate link:**       http://dsgnwrks.pro
-**Tags:**
-**Requires at least:** 3.6.0
-**Tested up to:**      3.6.0
-**Stable tag:**        0.1.0
-**License:**           GPLv2
+**Contributors:**      Jtsternberg  
+**Donate link:**       http://dsgnwrks.pro  
+**Tags:**              bookmarks, chrome bookmarks, pressthis  
+**Requires at least:** 3.6.0  
+**Tested up to:**      3.6.0  
+**Stable tag:**        0.1.0  
+**License:**           GPLv2  
 
 ## Description ##
 
